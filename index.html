@@ -1,0 +1,1036 @@
+# College Club Website - Full HTML/CSS/JS Code
+
+Save this as `index.html` and open it in your browser.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResoNix SSSE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        html{
+            scroll-behavior:smooth;
+        }
+
+        body{
+            background:#0b0f19;
+            color:white;
+            overflow-x:hidden;
+        }
+
+
+        /* ===== AUTO HORIZONTAL SCROLL ===== */
+
+.auto-gallery{
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-track{
+
+    display: flex;
+    gap: 20px;
+
+    width: max-content;
+
+    animation: autoScroll 25s linear infinite;
+}
+
+/* HOVER STOP */
+
+.auto-gallery:hover .gallery-track{
+    animation-play-state: paused;
+}
+
+/* SCROLL ANIMATION */
+
+@keyframes autoScroll{
+
+    from{
+        transform: translateX(0);
+    }
+
+    to{
+        transform: translateX(-50%);
+    }
+}
+
+
+        /* ===== MODAL ===== */
+
+.gallery-modal{
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.92);
+
+    z-index: 9999;
+
+    overflow-y: auto;
+
+    padding: 80px 20px 40px;
+}
+
+.gallery-modal.active{
+    display: block;
+}
+
+/* ===== CLOSE BUTTON ===== */
+
+.close-btn{
+
+    position: fixed;
+
+    top: 20px;
+    right: 30px;
+
+    font-size: 45px;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    z-index: 10000;
+
+    transition: 0.3s;
+}
+
+.close-btn:hover{
+    transform: scale(1.2);
+}
+
+/* ===== MODAL CONTENT ===== */
+
+.modal-content{
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+
+    gap: 20px;
+}
+
+.modal-content img{
+
+    width: 100%;
+
+    border-radius: 16px;
+}
+
+        /* Navbar */
+
+        nav{
+            width:100%;
+            padding:20px 8%;
+            position:fixed;
+            top:0;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            background:rgba(0,0,0,0.4);
+            backdrop-filter:blur(10px);
+            z-index:1000;
+        }
+
+        nav h1{
+            color:#00d9ff;
+            font-size:30px;
+        }
+
+        nav ul{
+            display:flex;
+            list-style:none;
+            gap:25px;
+        }
+
+        nav ul li a{
+            text-decoration:none;
+            color:white;
+            transition:0.3s;
+        }
+
+        nav ul li a:hover{
+            color:#00d9ff;
+        }
+
+        /* Hero Section */
+
+        .hero{
+            height:100vh;
+            background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)),
+            url("/image1.jpeg");
+            background-size:cover;
+            background-position:center;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
+            padding:20px;
+        }
+
+        .hero-content h2{
+            font-size:65px;
+            margin-bottom:20px;
+        }
+
+        .hero-content span{
+            color:#00d9ff;
+        }
+
+        .hero-content p{
+            font-size:20px;
+            max-width:700px;
+            margin:auto;
+            line-height:1.8;
+        }
+
+        .hero-btn{
+            margin-top:30px;
+            display:inline-block;
+            padding:15px 40px;
+            background:#00d9ff;
+            color:black;
+            text-decoration:none;
+            border-radius:40px;
+            font-weight:600;
+            transition:0.3s;
+        }
+
+        .hero-btn:hover{
+            transform:scale(1.05);
+        }
+
+        section{
+            padding:100px 8%;
+        }
+
+        .section-title{
+            text-align:center;
+            font-size:45px;
+            margin-bottom:60px;
+            color:#00d9ff;
+        }
+
+        /* About */
+
+        .about{
+           
+            align-items:center;
+            text-align: center;
+        }
+
+        .about img{
+            width:100%;
+            border-radius:20px;
+        }
+
+        .about-text p{
+            line-height:2;
+            font-size:18px;
+            text-align: center;
+        }
+
+        /* Stats */
+
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:30px;
+            text-align:center;
+        }
+
+        .stat-card{
+            background:#131c2f;
+            padding:40px;
+            border-radius:20px;
+            transition:0.3s;
+        }
+
+        .stat-card:hover{
+            transform:translateY(-10px);
+        }
+
+        .stat-card h2{
+            font-size:50px;
+            color:#00d9ff;
+        }
+
+        /* Activities */
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+            gap:30px;
+        }
+
+        .card{
+            background:#131c2f;
+            border-radius:20px;
+            overflow:hidden;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-10px);
+        }
+
+        .card img{
+            width:100%;
+            height:220px;
+            object-fit:cover;
+        }
+
+        .card-content{
+            padding:25px;
+        }
+
+        .card-content h3{
+            margin-bottom:15px;
+            color:#00d9ff;
+        }
+
+        /* Achievements */
+
+        .timeline{
+            border-left:4px solid #00d9ff;
+            padding-left:30px;
+        }
+
+        .timeline-item{
+            margin-bottom:40px;
+            background:#131c2f;
+            padding:25px;
+            border-radius:15px;
+        }
+
+        .timeline-item h3{
+            color:#00d9ff;
+            margin-bottom:10px;
+        }
+
+        /* Gallery */
+
+        .gallery{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:20px;
+        }
+
+        .gallery img{
+            width:100px;
+            height:100px;
+            object-fit:cover;
+            border-radius:15px;
+            transition:0.3s;
+        }
+
+        .gallery img:hover{
+            transform:scale(1.05);
+        }
+
+        /* Team */
+
+        .team{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:30px;
+        }
+
+        .team-card{
+            background:#131c2f;
+            text-align:center;
+            padding:30px;
+            border-radius:20px;
+        }
+
+        .team-card img{
+            width:120px;
+            height:120px;
+            border-radius:50%;
+            object-fit:cover;
+            margin-bottom:20px;
+        }
+
+        .team-card h3{
+            color:#00d9ff;
+            margin-bottom:10px;
+        }
+
+        /* Comments */
+
+        .comments{
+            max-width:700px;
+            margin:auto;
+        }
+
+        .comments textarea,
+        .comments input{
+            width:100%;
+            padding:15px;
+            margin-bottom:20px;
+            border:none;
+            border-radius:10px;
+            background:#131c2f;
+            color:white;
+        }
+
+        .comments button{
+            padding:15px 35px;
+            border:none;
+            background:#00d9ff;
+            border-radius:30px;
+            font-weight:600;
+            cursor:pointer;
+        }
+
+        .comment-box{
+            background:#131c2f;
+            padding:20px;
+            border-radius:15px;
+            margin-top:20px;
+        }
+
+        /* Footer */
+
+        footer{
+            background:#05070d;
+            text-align:center;
+            padding:30px;
+            margin-top:50px;
+        }
+
+        footer p{
+            color:#aaa;
+        }
+
+        /* Responsive */
+
+        @media(max-width:900px){
+
+            .hero-content h2{
+                font-size:45px;
+            }
+
+            .about{
+                grid-template-columns:1fr;
+            }
+
+            nav ul{
+                display:none;
+            }
+        }
+
+      /* ===== AUTO SCROLL TIMELINE ===== */
+
+.auto-scroll-timeline{
+    height: 420px;
+    overflow: hidden;
+    position: relative;
+}
+
+.auto-scroll-track{
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    animation: smoothTimelineScroll 20s linear infinite;
+}
+
+/* Pause on Hover */
+
+.auto-scroll-timeline:hover .auto-scroll-track{
+    animation-play-state: paused;
+}
+
+/* Smooth Infinite Scroll */
+
+@keyframes smoothTimelineScroll{
+
+    from{
+        transform: translateY(0);
+    }
+
+    to{
+        transform: translateY(-50%);
+    }
+}
+
+/* Responsive */
+
+@media screen and (max-width:768px){
+
+    .auto-scroll-timeline{
+        height: 350px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+
+    <nav>
+        <h1>RezonX</h1>
+
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#activities">Activities</a></li>
+            <li><a href="#Projects">Achievements</a></li>
+            <li><a href="#Achievements">Projects</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#join">Join</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>WELCOME TO <span>RezonX</span></h2>
+
+            <p>
+                Aspirations Resonate Execution
+            </p>
+
+            <a href="#join" class="hero-btn">Join Our Club</a>
+        </div>
+    </section>
+
+    <!-- About -->
+
+    <section id="about">
+
+        <h1 class="section-title">About Our Club</h1>
+
+        <div class="about">
+
+            
+
+            <div class="about-text ">
+                <p>
+                    Our club focuses on innovation, technical learning,
+                    teamwork, and project development. We organize workshops,
+                    hackathons, and participate in
+                    inter-college competitions.
+
+                    Our mission is to help students gain practical skills,
+                    leadership qualities, and industry exposure.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Stats -->
+
+    <section>
+
+        <h1 class="section-title">Club Statistics</h1>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h2>15+</h2>
+                <p>Members</p>
+            </div>
+
+            <div class="stat-card">
+                <h2>8+</h2>
+                <p>Events</p>
+            </div>
+
+            <div class="stat-card">
+                <h2>5+</h2>
+                <p>Prizes Won</p>
+            </div>
+
+            <div class="stat-card">
+                <h2>5+</h2>
+                <p>Projects</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Activities -->
+
+    <section id="activities">
+
+        <h1 class="section-title">Activities & Events</h1>
+
+        <div class="cards">
+
+             <div class="card">
+                <img src="vvce1.jpg">
+
+                <div class="card-content">
+                    <h3>Hackathons</h3>
+                    <p>
+                        From brainstorming bold ideas to building complete working prototypes, our team actively develops innovative solutions <br/>
+                        during intense hackathon competitions, turning concepts into reality within hours.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="ROBOSOCCER2.jpeg">
+
+                <div class="card-content">
+                    <h3>Robo Soccer</h3>
+                    <p>
+                        We design and build robo soccer bots completely from scratch — integrating mechanical design, motor control, programming,<br/>
+                         and wireless communication to compete in high-energy robotic soccer battles.
+                    </p>
+                </div>
+            </div>
+
+           
+
+            <div class="card">
+                <img src="LINE FOLLOWEER1.jpeg">
+
+                <div class="card-content">
+                    <h3>Line Follower Bot</h3>
+                    <p>
+                        Our members engineer autonomous line follower robots from the ground up, focusing on sensor integration,<br/>
+                         circuit design, precision coding, and high-speed path tracking performance.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="iitmaero.jpg">
+
+                <div class="card-content">
+                    <h3>Aero Modelling</h3>
+                    <p>
+                        We create aerodynamic aircraft models from scratch by applying principles of flight,<br/>
+                         structural design, balance, and propulsion to develop efficient and innovative flying systems.
+                    </p>
+                </div>
+            </div>
+
+             <div class="card">
+                <img src="workshop.jpeg">
+
+                <div class="card-content">
+                    <h3>Circuit building Workshop</h3>
+                    <p>
+                        Conducted technical workshops on Circuit building where students get hands on experiences by working with defferent kinds of Sensors.
+                    </p>
+                </div>
+            </div>
+
+             <div class="card">
+                <img src="CAD.jpeg">
+
+                <div class="card-content">
+                    <h3>CAD Workshop</h3>
+                    <p>
+                        Conducted technical workshops on CAD Designing where students gained hands-on <br/>
+                        experience in creating 2D and 3D models using industry-standard design software and engineering design principles.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Achievements -->
+
+    <section id="Projects">
+
+        <h1 class="section-title">Projects</h1>
+
+        <div class="timeline   ">
+            
+
+        <div class="timeline-wrapper">
+    <div class="auto-scroll-timeline">
+
+    <div class="auto-scroll-track">
+
+        <div class="timeline-item">
+            <h3>Crop care and KVK alert system</h3>
+            <p>
+                AI-Based Crop Disease Detection and KVK Alert System helps farmers detect crop diseases by uploading leaf images.<br/>
+                        The YOLO model identifies the disease and suggests suitable remedies like pesticides or weedicides.<br/>
+                        Using n8n, the detected disease and location are automatically sent to nearby Krishi Vigyan Kendra (KVKs) for monitoring and research purposes.
+            </p>
+        </div>
+
+        <div class="timeline-item">
+            <h3>Multifunctional AgriBot </h3>
+            <p>
+                A compact prototype of a multifunctional agricultural robot designed for uneven Indian terrain.<br/>
+                The AgriBot integrates a pesticide spraying system with a camera to enable targeted and efficient application.<br/>
+                It supports crop surveillance, generates basic crop health insights, and can perform additional tasks such as grass cutting.<br/>
+                The project aims to evolve into a fully autonomous system with future integration of GPS-based navigation.
+        </div>
+
+        <div class="timeline-item">
+            <h3>Voice controlled Bot </h3>
+            <p>
+                This project aims to promote student engagement in robotics through interactive voice-controlled bots.<br/>
+                The system enables basic voice interaction to answer queries and provide task reminders, offering a simple and accessible introduction to human–machine interaction and automation.
+            </p>
+        </div>
+
+        <div class="timeline-item">
+            <h3> Setup for 3D filament with PET bottle </h3>
+            <p>
+                This project demonstrates a sustainable approach by converting used PET bottles into 3D printing filament.<br/>
+                 It encourages students to think innovatively about waste utilization and environmental responsibility.<br/>
+                  The setup produces low-cost filament, enabling greater accessibility to 3D printing while reducing material costs and plastic waste.
+            </p>
+        </div>
+
+         <div class="timeline-item">
+            <h3>Smart Kiosk Printer </h3>
+            <p>
+                Develop a SmartPrint Kiosk System (Local Network Version) that allows users to upload documents, select print options, make UPI payments using a static QR code,<br/>
+                and receive automatic printouts via a USB-connected printer.<br/>
+                Additionally, the system includes an admin portal for monitoring jobs and a notification system for error alerts, ensuring reliability and real-time control.
+            </p>
+        </div>
+
+
+        <!-- Duplicate Items -->
+
+       <div class="timeline-item">
+            <h3>Crop care and KVK alert system</h3>
+            <p>
+                AI-Based Crop Disease Detection and KVK Alert System helps farmers detect crop diseases by uploading leaf images.<br/>
+                        The YOLO model identifies the disease and suggests suitable remedies like pesticides or weedicides.<br/>
+                        Using n8n, the detected disease and location are automatically sent to nearby Krishi Vigyan Kendra (KVKs) for monitoring and research purposes.
+            </p>
+        </div>
+
+        <div class="timeline-item">
+            <h3>Multifunctional AgriBot </h3>
+            <p>
+                A compact prototype of a multifunctional agricultural robot designed for uneven Indian terrain.<br/>
+                The AgriBot integrates a pesticide spraying system with a camera to enable targeted and efficient application.<br/>
+                It supports crop surveillance, generates basic crop health insights, and can perform additional tasks such as grass cutting.<br/>
+                The project aims to evolve into a fully autonomous system with future integration of GPS-based navigation.
+        </div>
+
+        <div class="timeline-item">
+            <h3>Voice controlled Bot </h3>
+            <p>
+                This project aims to promote student engagement in robotics through interactive voice-controlled bots.<br/>
+                The system enables basic voice interaction to answer queries and provide task reminders, offering a simple and accessible introduction to human–machine interaction and automation.
+            </p>
+        </div>
+
+        <div class="timeline-item">
+            <h3> Setup for 3D filament with PET bottle </h3>
+            <p>
+                This project demonstrates a sustainable approach by converting used PET bottles into 3D printing filament.<br/>
+                 It encourages students to think innovatively about waste utilization and environmental responsibility.<br/>
+                  The setup produces low-cost filament, enabling greater accessibility to 3D printing while reducing material costs and plastic waste.
+            </p>
+        </div>
+
+         <div class="timeline-item">
+            <h3>Smart Kiosk Printer </h3>
+            <p>
+                Develop a SmartPrint Kiosk System (Local Network Version) that allows users to upload documents, select print options, make UPI payments using a static QR code,<br/>
+                and receive automatic printouts via a USB-connected printer.<br/>
+                Additionally, the system includes an admin portal for monitoring jobs and a notification system for error alerts, ensuring reliability and real-time control.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+    </section>
+
+    
+    <!-- Project -->
+
+    <section id="Achievements">
+
+        <h1 class="section-title">Achievement Highlights</h1>
+
+        <div class="team">
+
+             <div class="card">
+                <img src="university.jpeg">
+
+                <div class="card-content">
+                    <h3>1st place at the Social Work Innovation Ideathon conducted by Tumkur University. </h3>
+                    <p>
+                        
+                    </p>
+                </div>
+            </div>
+
+             
+
+             <div class="card">
+                <img src="innovate.jpeg">
+
+                <div class="card-content">
+                    <h3>2nd place at  ideathon conducted by ISBM .</h3>
+                    <p>
+                        
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="certificate.jpeg">
+
+                <div class="card-content">
+                    <h3>National level 3rd place in Robo Cup conducted by VNIT Nagpur. </h3>
+                    <p>
+                    
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Gallery -->
+
+   <!-- ===== GALLERY SECTION ===== -->
+
+<section class="gallery-section-main">
+
+    <h1 class="section-title">Gallery</h1>
+
+    <div class="auto-gallery">
+
+    <div class="gallery-track">
+
+        <!-- IMAGE 1 -->
+        <div class="card">
+            <img 
+                src="vvce1.jpg"
+                onclick="openModal('modal1')"
+            >
+        </div>
+
+        <!-- IMAGE 2 -->
+        <div class="card">
+            <img 
+                src="VNIT1.jpeg"
+                onclick="openModal('modal2')"
+            >
+        </div>
+
+        <!-- IMAGE 3 -->
+        <div class="card">
+            <img 
+                src="skyhack2.0.jpg"
+                onclick="openModal('modal3')"
+            >
+        </div>
+
+        <!-- DUPLICATES -->
+
+        <div class="card">
+            <img 
+                src="vvce1.jpg"
+                onclick="openModal('modal1')"
+            >
+        </div>
+
+        <div class="card">
+            <img 
+                src="VNIT1.jpeg"
+                onclick="openModal('modal2')"
+            >
+        </div>
+
+        <div class="card">
+            <img 
+                src="skyhack2.0.jpg"
+                onclick="openModal('modal3')"
+            >
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+<!-- ===== MODAL 1 ===== -->
+
+<div id="modal1" class="gallery-modal">
+
+    <span class="close-btn" onclick="closeModal('modal1')">
+        &times;
+    </span>
+
+    <div class="modal-content">
+
+        <img src="vvce2.jpeg">
+        <img src="vvce3.jpg">
+        <img src="vvce4.jpg">
+        <img src="vvce5.jpg">
+
+    </div>
+
+</div>
+
+
+<!-- ===== MODAL 2 ===== -->
+
+<div id="modal2" class="gallery-modal">
+
+    <span class="close-btn" onclick="closeModal('modal2')">
+        &times;
+    </span>
+
+    <div class="modal-content">
+
+        <img src="VNIT2.jpeg">
+        <img src="VNIT3.jpeg">
+        <img src="VNIT4.jpeg">
+        <img src="vnit5.jpeg">
+
+    </div>
+
+</div>
+
+
+<!-- ===== MODAL 3 ===== -->
+
+<div id="modal3" class="gallery-modal">
+
+    <span class="close-btn" onclick="closeModal('modal3')">
+        &times;
+    </span>
+
+    <div class="modal-content">
+
+        <img src="skyhack1.jpeg">
+        <img src="skyhack2.jpeg">
+        <img src="skyhack2.0.jpg">
+
+    </div>
+
+</div>
+
+
+ <!-- Join Club -->
+
+    <section id="join">
+
+        <h1 class="section-title">Ready to Build Something Extraordinary?</h1>
+
+        <div class="comments">
+
+            <input type="text" id="name" placeholder="Your Name">
+
+            <textarea id="message" rows="5" placeholder="Why do you want to join our club?"></textarea>
+
+            <button onclick="addComment()">Submit</button>
+
+            <div id="comment-section"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+
+    <footer>
+        <p>© 2026 RezonX Club | Designed for Innovation</p>
+    </footer>
+
+
+    <script>
+
+        function addComment(){
+
+            let name = document.getElementById('name').value;
+            let message = document.getElementById('message').value;
+
+            if(name === '' || message === ''){
+                alert('Please fill all fields');
+                return;
+            }
+
+            let commentBox = document.createElement('div');
+            commentBox.classList.add('comment-box');
+
+            commentBox.innerHTML = `
+                <h3>${name}</h3>
+                <p>${message}</p>
+            `;
+
+            document.getElementById('comment-section').appendChild(commentBox);
+
+            document.getElementById('name').value='';
+            document.getElementById('message').value='';
+        }
+
+    </script>
+
+   <script>
+
+function openModal(modalId){
+
+    document
+        .getElementById(modalId)
+        .classList.add("active");
+
+}
+
+function closeModal(modalId){
+
+    document
+        .getElementById(modalId)
+        .classList.remove("active");
+
+}
+
+</script>
+
+</body>
+</html>
+```
+
