@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -180,8 +181,8 @@
 
         .hero{
             height:100vh;
-            background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7));
-            background-image :url("image1.jpeg");
+            background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)),
+            url("/image1.jpeg");
             background-size:cover;
             background-position:center;
             display:flex;
@@ -384,6 +385,7 @@
         .comments{
             max-width:700px;
             margin:auto;
+            text-align: center;
         }
 
         .comments textarea,
@@ -955,15 +957,13 @@
 
         <h1 class="section-title">Ready to Build Something Extraordinary?</h1>
 
-        <div class="comments">
+        <div class="comments ">
 
-            <input type="text" id="name" placeholder="Your Name">
+            
 
-            <textarea id="message" rows="5" placeholder="Why do you want to join our club?"></textarea>
+            <button onclick="window.open('https://forms.gle/6BAj9EvfC3Y6bKty5','_blank')">Click here</button>
 
-            <button onclick="addComment()">Submit</button>
-
-            <div id="comment-section"></div>
+            
 
         </div>
 
