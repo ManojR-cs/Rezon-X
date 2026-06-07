@@ -1,6 +1,6 @@
 # ResonX SSSE Website
 
-Official website for the ResonX Club of Sri Sivasubramaniya Nadar Engineering College.
+Official website for the ResonX Club of Sri Siddhartha School of Engineering College.
 
 ## Features
 - Responsive design
