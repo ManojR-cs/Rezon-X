@@ -1,4 +1,374 @@
 /* =========================================================
+   SUPABASE CONFIGURATION
+   ========================================================= */
+
+const SUPABASE_URL = "https://zjmqqmxxxfzsabkimguh.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_XK9cx2nyhTs9GB9qFeyA4w_ydlpztJl";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+/* =========================================================
+   PROJECT LIKES - SUPABASE
+========================================================= */
+
+const VISITOR_ID_KEY = "rezonx_visitor_id";
+
+
+function getVisitorId() {
+
+    let visitorId =
+        localStorage.getItem(
+            VISITOR_ID_KEY
+        );
+
+
+    if (!visitorId) {
+
+        visitorId =
+            crypto.randomUUID();
+
+        localStorage.setItem(
+            VISITOR_ID_KEY,
+            visitorId
+        );
+
+    }
+
+
+    return visitorId;
+
+}
+
+
+const visitorId =
+    getVisitorId();
+
+
+
+/* =========================================================
+   LOAD LIKE COUNTS
+========================================================= */
+
+async function loadLikeCounts() {
+
+    const likeButtons =
+        document.querySelectorAll(
+            ".project-like-btn"
+        );
+
+
+    if (!likeButtons.length) {
+        return;
+    }
+
+
+    const {
+        data: likes,
+        error
+    } =
+        await supabaseClient
+            .from("project_likes")
+            .select(
+                "project_id, visitor_id"
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Failed to load likes:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    const likeCountByProject = {};
+
+
+    likes.forEach(
+        function (like) {
+
+            if (
+                !likeCountByProject[
+                    like.project_id
+                ]
+            ) {
+
+                likeCountByProject[
+                    like.project_id
+                ] = 0;
+
+            }
+
+
+            likeCountByProject[
+                like.project_id
+            ]++;
+
+        }
+    );
+
+
+    likeButtons.forEach(
+        function (button) {
+
+            const projectId =
+                button.dataset.projectId;
+
+
+            const countElement =
+                button.querySelector(
+                    ".like-count"
+                );
+
+
+            if (!countElement) {
+                return;
+            }
+
+
+            countElement.textContent =
+                likeCountByProject[
+                    projectId
+                ] || 0;
+
+
+            const alreadyLiked =
+                likes.some(
+                    function (like) {
+
+                        return (
+                            like.project_id ===
+                            projectId &&
+
+                            like.visitor_id ===
+                            visitorId
+                        );
+
+                    }
+                );
+
+
+            button.classList.toggle(
+                "liked",
+                alreadyLiked
+            );
+
+
+            button.setAttribute(
+                "aria-pressed",
+                String(alreadyLiked)
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   HANDLE PROJECT LIKES
+========================================================= */
+
+async function handleProjectLike(
+    button
+) {
+
+    const projectId =
+        button.dataset.projectId;
+
+
+    if (!projectId) {
+
+        console.error(
+            "Project ID is missing."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        button.classList.contains(
+            "liked"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+
+    try {
+
+        const {
+            data: existingLike,
+            error: checkError
+        } =
+            await supabaseClient
+                .from("project_likes")
+                .select("id")
+                .eq(
+                    "project_id",
+                    projectId
+                )
+                .eq(
+                    "visitor_id",
+                    visitorId
+                )
+                .maybeSingle();
+
+
+        if (checkError) {
+
+            throw checkError;
+
+        }
+
+
+        if (existingLike) {
+
+            button.classList.add(
+                "liked"
+            );
+
+            button.setAttribute(
+                "aria-pressed",
+                "true"
+            );
+
+            return;
+
+        }
+
+
+        const {
+            error: insertError
+        } =
+            await supabaseClient
+                .from("project_likes")
+                .insert({
+
+                    project_id:
+                        projectId,
+
+                    visitor_id:
+                        visitorId
+
+                });
+
+
+        if (insertError) {
+
+            throw insertError;
+
+        }
+
+
+        const countElement =
+            button.querySelector(
+                ".like-count"
+            );
+
+
+        if (countElement) {
+
+            const currentCount =
+                Number(
+                    countElement.textContent
+                ) || 0;
+
+
+            countElement.textContent =
+                currentCount + 1;
+
+        }
+
+
+        button.classList.add(
+            "liked"
+        );
+
+
+        button.setAttribute(
+            "aria-pressed",
+            "true"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Failed to add like:",
+            error
+        );
+
+
+        alert(
+            "Unable to add your like. Please try again."
+        );
+
+
+    } finally {
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   INITIALIZE PROJECT LIKES
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const likeButtons =
+            document.querySelectorAll(
+                ".project-like-btn"
+            );
+
+
+        likeButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        handleProjectLike(
+                            button
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        loadLikeCounts();
+
+    }
+);
+
+/* =========================================================
    REZONX WEBSITE - COMPLETE JAVASCRIPT
    ========================================================= */
 
@@ -106,27 +476,265 @@
 
 })();
 
-
 /* =========================================================
-   COMMENTS
+   PROJECT COMMENTS - SUPABASE
    ========================================================= */
 
-function addComment() {
+let activeProjectId = null;
+
+
+/* =========================================================
+   LOAD COMMENTS
+   ========================================================= */
+
+async function loadProjectComments(
+    projectId
+) {
+
+    const commentsList =
+        document.getElementById(
+            "projectCommentsList"
+        );
+
+    const modalCommentCount =
+        document.getElementById(
+            "modalCommentCount"
+        );
+
+
+    if (
+        !commentsList ||
+        !modalCommentCount
+    ) {
+
+        return;
+
+    }
+
+
+    commentsList.innerHTML =
+        "<p>Loading comments...</p>";
+
+
+    try {
+
+        const {
+            data: comments,
+            error
+        } =
+            await supabaseClient
+                .from("project_comments")
+                .select(
+                    "id, name, message, created_at"
+                )
+                .eq(
+                    "project_id",
+                    projectId
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        modalCommentCount.textContent =
+            `${comments.length} Comment${
+                comments.length === 1
+                    ? ""
+                    : "s"
+            }`;
+
+
+        commentsList.innerHTML = "";
+
+
+        if (comments.length === 0) {
+
+            commentsList.innerHTML =
+                "<p class=\"no-comments\">No comments yet. Be the first to comment!</p>";
+
+            return;
+
+        }
+
+
+        comments.forEach(
+            function (comment) {
+
+                const commentBox =
+                    document.createElement(
+                        "div"
+                    );
+
+                commentBox.className =
+                    "project-comment";
+
+
+                const name =
+                    document.createElement(
+                        "h4"
+                    );
+
+                name.textContent =
+                    comment.name;
+
+
+                const message =
+                    document.createElement(
+                        "p"
+                    );
+
+                message.textContent =
+                    comment.message;
+
+
+                const date =
+                    document.createElement(
+                        "small"
+                    );
+
+                date.textContent =
+                    formatCommentDate(
+                        comment.created_at
+                    );
+
+
+                commentBox.appendChild(
+                    name
+                );
+
+                commentBox.appendChild(
+                    message
+                );
+
+                commentBox.appendChild(
+                    date
+                );
+
+
+                commentsList.appendChild(
+                    commentBox
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load comments:",
+            error
+        );
+
+
+        commentsList.innerHTML =
+            "<p class=\"comment-error\">Failed to load comments. Please try again.</p>";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   FORMAT COMMENT DATE
+   ========================================================= */
+
+function formatCommentDate(
+    dateString
+) {
+
+    if (!dateString) {
+
+        return "";
+
+    }
+
+
+    const date =
+        new Date(
+            dateString
+        );
+
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+
+            year:
+                "numeric",
+
+            month:
+                "short",
+
+            day:
+                "numeric"
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   SUBMIT COMMENT
+   ========================================================= */
+
+async function submitProjectComment(
+    event
+) {
+
+    event.preventDefault();
+
+
+    if (!activeProjectId) {
+
+        alert(
+            "Please open a project first."
+        );
+
+        return;
+
+    }
+
 
     const nameInput =
-        document.getElementById("name");
+        document.getElementById(
+            "commentName"
+        );
+
+    const emailInput =
+        document.getElementById(
+            "commentEmail"
+        );
 
     const messageInput =
-        document.getElementById("message");
+        document.getElementById(
+            "commentMessage"
+        );
 
-    const commentSection =
-        document.getElementById("comment-section");
+    const submitButton =
+        event.target.querySelector(
+            ".submit-comment-btn"
+        );
 
 
     if (
         !nameInput ||
+        !emailInput ||
         !messageInput ||
-        !commentSection
+        !submitButton
     ) {
 
         return;
@@ -137,64 +745,243 @@ function addComment() {
     const name =
         nameInput.value.trim();
 
+    const email =
+        emailInput.value.trim();
+
     const message =
         messageInput.value.trim();
 
 
     if (
-        name === "" ||
-        message === ""
+        !name ||
+        !message
     ) {
 
-        alert("Please fill all fields");
+        alert(
+            "Please enter your name and comment."
+        );
 
         return;
 
     }
 
 
-    const commentBox =
-        document.createElement("div");
+    submitButton.disabled =
+        true;
 
-    commentBox.classList.add(
-        "comment-box"
-    );
-
-
-    const heading =
-        document.createElement("h3");
-
-    heading.textContent =
-        name;
+    submitButton.textContent =
+        "Posting...";
 
 
-    const paragraph =
-        document.createElement("p");
+    try {
 
-    paragraph.textContent =
-        message;
+        const {
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "project_comments"
+                )
+                .insert({
+
+                    project_id:
+                        activeProjectId,
+
+                    name:
+                        name,
+
+                    email:
+                        email || null,
+
+                    message:
+                        message
+
+                });
 
 
-    commentBox.appendChild(
-        heading
-    );
+        if (error) {
 
-    commentBox.appendChild(
-        paragraph
-    );
+            throw error;
+
+        }
 
 
-    commentSection.appendChild(
-        commentBox
-    );
+        nameInput.value = "";
+        emailInput.value = "";
+        messageInput.value = "";
 
 
-    nameInput.value = "";
+        await loadProjectComments(
+            activeProjectId
+        );
 
-    messageInput.value = "";
+
+        await loadProjectCommentCounts();
+
+
+        submitButton.textContent =
+            "Comment Posted";
+
+
+        setTimeout(
+            function () {
+
+                submitButton.textContent =
+                    "Post Comment";
+
+            },
+            1500
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Failed to submit comment:",
+            error
+        );
+
+
+        alert(
+            "Failed to submit comment. Please try again."
+        );
+
+
+        submitButton.textContent =
+            "Post Comment";
+
+
+    } finally {
+
+        submitButton.disabled =
+            false;
+
+    }
 
 }
 
+
+
+async function loadProjectCommentCounts() {
+
+    const commentCountElements =
+        document.querySelectorAll(
+            ".comment-count[data-project-id]"
+        );
+
+
+    if (!commentCountElements.length) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: comments,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "project_comments"
+                )
+                .select(
+                    "project_id"
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const commentCountByProject =
+            {};
+
+
+        comments.forEach(
+            function (comment) {
+
+                if (
+                    !commentCountByProject[
+                        comment.project_id
+                    ]
+                ) {
+
+                    commentCountByProject[
+                        comment.project_id
+                    ] = 0;
+
+                }
+
+
+                commentCountByProject[
+                    comment.project_id
+                ]++;
+
+            }
+        );
+
+
+        commentCountElements.forEach(
+            function (countElement) {
+
+                const projectId =
+                    countElement.dataset.projectId;
+
+
+                countElement.textContent =
+                    commentCountByProject[
+                        projectId
+                    ] || 0;
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load comment counts:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZE PROJECT COMMENTS
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const commentForm =
+            document.getElementById(
+                "projectCommentForm"
+            );
+
+
+        if (commentForm) {
+
+            commentForm.addEventListener(
+                "submit",
+                submitProjectComment
+            );
+
+        }
+
+
+       
+
+
+        loadProjectCommentCounts();
+
+    }
+);
 
 /* =========================================================
    GENERAL MODALS
@@ -343,7 +1130,7 @@ const projectData = {
    ========================================================= */
 
 function openProjectModal(projectId) {
-
+    activeProjectId = projectId;
     const project =
         projectData[projectId];
 
@@ -457,6 +1244,9 @@ function openProjectModal(projectId) {
     document.body.style.overflow =
         "hidden";
 
+        loadProjectComments(
+    projectId
+);
 }
 
 
@@ -477,6 +1267,7 @@ function closeProjectModal() {
         "active"
     );
 
+    activeProjectId = null;
 
     modal.setAttribute(
         "aria-hidden",
@@ -1444,3 +2235,300 @@ document.addEventListener(
     }
 
 })();
+
+/* =========================================================
+   RECENT HIGHLIGHTS - INFINITE SCROLL
+========================================================= */
+
+(function () {
+
+    const highlightsTrack =
+        document.querySelector(
+            ".highlights-track"
+        );
+
+
+    if (!highlightsTrack) {
+        return;
+    }
+
+
+    const originalCards =
+        Array.from(
+            highlightsTrack.children
+        );
+
+
+    originalCards.forEach(
+        function (card) {
+
+            const duplicate =
+                card.cloneNode(true);
+
+
+            duplicate.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            highlightsTrack.appendChild(
+                duplicate
+            );
+
+        }
+    );
+
+})();
+
+/* =========================================================
+   CMS ACTIVITIES / RECENT HIGHLIGHTS
+========================================================= */
+
+async function loadActivities() {
+
+    const activitiesTrack =
+        document.getElementById(
+            "activitiesTrack"
+        );
+
+
+    if (!activitiesTrack) {
+        return;
+    }
+
+
+    const {
+        data: activities,
+        error
+    } = await supabaseClient
+        .from("activities")
+        .select("*")
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            "Failed to load activities:",
+            error
+        );
+
+
+        activitiesTrack.innerHTML =
+            `
+            <div class="activities-loading">
+
+                Unable to load recent highlights.
+
+            </div>
+            `;
+
+
+        return;
+
+    }
+
+
+    if (
+        !activities ||
+        activities.length === 0
+    ) {
+
+        activitiesTrack.innerHTML =
+            `
+            <div class="activities-loading">
+
+                No recent highlights available.
+
+            </div>
+            `;
+
+
+        return;
+
+    }
+
+
+    activitiesTrack.innerHTML =
+        "";
+
+
+    function createActivityCard(
+        activity
+    ) {
+
+        const card =
+            document.createElement(
+                "a"
+            );
+
+
+        card.className =
+            "activity-card";
+
+
+        card.href =
+            activity.link || "#";
+
+
+        if (activity.link) {
+
+            card.target =
+                "_blank";
+
+
+            card.rel =
+                "noopener noreferrer";
+
+        }
+
+
+        const imageUrl =
+            activity.image_url ||
+            "assets/placeholder.jpg";
+
+
+        const date =
+            activity.created_at
+                ? new Date(
+                    activity.created_at
+                ).toLocaleDateString(
+                    "en-IN",
+                    {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric"
+                    }
+                )
+                : "";
+
+
+        card.innerHTML =
+            `
+            <div
+                class="activity-image-wrapper">
+
+                <img
+                    class="activity-image"
+                    src="${imageUrl}"
+                    alt="">
+
+
+                <div
+                    class="activity-overlay">
+
+                    <span
+                        class="activity-read-more">
+
+                        Read More ↗
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="activity-content">
+
+                <h3
+                    class="activity-title">
+
+                </h3>
+
+
+                <p
+                    class="activity-description">
+
+                </p>
+
+
+                <p
+                    class="activity-date">
+
+                </p>
+
+            </div>
+            `;
+
+
+        card
+            .querySelector(
+                ".activity-image"
+            )
+            .alt =
+            activity.title || "RezonX activity";
+
+
+        card
+            .querySelector(
+                ".activity-title"
+            )
+            .textContent =
+            activity.title || "";
+
+
+        card
+            .querySelector(
+                ".activity-description"
+            )
+            .textContent =
+            activity.description || "";
+
+
+        card
+            .querySelector(
+                ".activity-date"
+            )
+            .textContent =
+            date;
+
+
+        return card;
+
+    }
+
+
+    /* ORIGINAL CARDS */
+
+    activities.forEach(
+        function (activity) {
+
+            activitiesTrack.appendChild(
+                createActivityCard(
+                    activity
+                )
+            );
+
+        }
+    );
+
+
+    /* DUPLICATE CARDS FOR
+       INFINITE SCROLL */
+
+    activities.forEach(
+        function (activity) {
+
+            activitiesTrack.appendChild(
+                createActivityCard(
+                    activity
+                )
+            );
+
+        }
+    );
+
+}
+
+
+/* LOAD ACTIVITIES */
+
+loadActivities();

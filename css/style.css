@@ -1914,3 +1914,1003 @@
                 transform:none;
             }
         }
+
+
+/* =========================================================
+   PROJECT TECH STACK
+   ========================================================= */
+
+.project-tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0;
+}
+
+.project-tech-stack span {
+    padding: 6px 12px;
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    border-radius: 999px;
+
+    background: rgba(0, 229, 255, 0.08);
+
+    color: #00e5ff;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   VIEW PROJECT BUTTON
+   ========================================================= */
+
+.project-btn {
+    width: 100%;
+    margin-top: 4px;
+}
+
+
+/* =========================================================
+   PROJECT ENGAGEMENT
+   LIKES + COMMENTS
+   ========================================================= */
+
+.project-engagement {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 18px;
+    padding-top: 16px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+.project-like-btn,
+.project-comment-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    flex: 1;
+
+    padding: 10px 8px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: #cbd5e1;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        color 0.25s ease,
+        background 0.25s ease,
+        transform 0.2s ease;
+}
+
+
+.project-like-btn:hover,
+.project-comment-btn:hover {
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.06);
+
+    transform: translateY(-2px);
+}
+
+
+.project-like-btn:active,
+.project-comment-btn:active {
+    transform: scale(0.96);
+}
+
+
+.like-count,
+.comment-count {
+    color: #00e5ff;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   LIKED STATE
+   ========================================================= */
+
+.project-like-btn.liked {
+    color: #ff5b79;
+}
+
+
+.project-like-btn.liked .like-count {
+    color: #ff5b79;
+}
+
+
+/* =========================================================
+   PROJECT COMMENTS SECTION
+   ========================================================= */
+
+.project-comments-section {
+    margin-top: 35px;
+    padding-top: 28px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.comments-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+
+.comments-heading h3 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 1.3rem;
+}
+
+
+#modalCommentCount {
+    color: #00e5ff;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   COMMENT FORM
+   ========================================================= */
+
+#projectCommentForm {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-bottom: 30px;
+}
+
+
+#projectCommentForm input,
+#projectCommentForm textarea {
+    width: 100%;
+
+    padding: 13px 15px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+
+    outline: none;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 0.95rem;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+
+#projectCommentForm textarea {
+    resize: vertical;
+
+    min-height: 100px;
+}
+
+
+#projectCommentForm input::placeholder,
+#projectCommentForm textarea::placeholder {
+    color: #64748b;
+}
+
+
+#projectCommentForm input:focus,
+#projectCommentForm textarea:focus {
+    border-color: #00e5ff;
+
+    background: rgba(0, 229, 255, 0.04);
+}
+
+
+/* =========================================================
+   SUBMIT COMMENT BUTTON
+   ========================================================= */
+
+.submit-comment-btn {
+    align-self: flex-start;
+
+    padding: 12px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #00e5ff;
+
+    color: #061018;
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.submit-comment-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+.submit-comment-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   COMMENTS LIST
+   ========================================================= */
+
+.project-comments-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+.comment-item {
+    padding: 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.03);
+}
+
+
+.comment-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 8px;
+}
+
+
+.comment-item-name {
+    color: #ffffff;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+
+.comment-item-date {
+    color: #64748b;
+
+    font-size: 0.75rem;
+}
+
+
+.comment-item-message {
+    margin: 0;
+
+    color: #cbd5e1;
+
+    line-height: 1.6;
+}
+
+
+.no-comments {
+    margin: 10px 0 0;
+
+    color: #64748b;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   LOADING COMMENTS
+   ========================================================= */
+
+.comments-loading {
+    padding: 20px;
+
+    color: #94a3b8;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .project-tech-stack {
+        margin: 15px 0;
+    }
+
+
+    .project-tech-stack span {
+        padding: 5px 10px;
+
+        font-size: 0.72rem;
+    }
+
+
+    .project-engagement {
+        gap: 6px;
+
+        margin-top: 15px;
+    }
+
+
+    .project-like-btn,
+    .project-comment-btn {
+        gap: 5px;
+
+        padding: 9px 4px;
+
+        font-size: 0.8rem;
+    }
+
+
+    .comments-heading {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+
+    .comment-item-header {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 4px;
+    }
+
+
+    .submit-comment-btn {
+        width: 100%;
+    }
+
+}
+
+/* ========================================
+   PROJECT CARD LAYOUT FIX
+======================================== */
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+}
+
+.project-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+.project-brief {
+    margin-bottom: 20px;
+    padding-bottom: 0;
+}
+
+/* TECH STACK */
+
+.project-technologies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    min-height: auto;
+    margin: 0 0 20px;
+}
+
+.tech-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+/* BOTTOM ACTIONS */
+
+.project-actions {
+    width: 100%;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.view-project-btn {
+    margin-bottom: 18px;
+}
+
+/* LIKE + COMMENT ROW */
+
+.project-engagement {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.like-btn,
+.comment-btn {
+    flex: 0 1 auto;
+}
+
+
+/* =========================================================
+   RECENT HIGHLIGHTS
+========================================================= */
+
+#highlights {
+    padding: 100px 0;
+    overflow: hidden;
+    text-align: center;
+}
+
+
+.highlights-eyebrow {
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #7c3aed;
+}
+
+
+.highlights-subtitle {
+    max-width: 650px;
+    margin: 0 auto 45px;
+    padding: 0 20px;
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+
+.highlights-marquee {
+    width: 100%;
+    overflow: hidden;
+    padding: 25px 0 35px;
+}
+
+
+.highlights-track {
+    display: flex;
+    gap: 30px;
+    width: max-content;
+
+    animation:
+        highlightsScroll
+        35s
+        linear
+        infinite;
+}
+
+
+.highlights-track:hover {
+    animation-play-state: paused;
+}
+
+
+.highlight-card {
+    position: relative;
+
+    display: block;
+
+    width: 360px;
+    height: 450px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    text-decoration: none;
+
+    background: #111827;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        filter 0.4s ease;
+
+    cursor: pointer;
+}
+
+
+.highlight-card img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.5s ease;
+}
+
+
+.highlight-card::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.92),
+            rgba(0, 0, 0, 0.35) 55%,
+            rgba(0, 0, 0, 0.05)
+        );
+}
+
+
+.highlight-overlay {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 2;
+
+    padding: 28px;
+
+    text-align: left;
+
+    color: white;
+}
+
+
+.highlight-date {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    font-size: 0.8rem;
+
+    font-weight: 600;
+
+    opacity: 0.85;
+}
+
+
+.highlight-overlay h2 {
+    margin: 0 0 12px;
+
+    font-size: 1.45rem;
+
+    line-height: 1.35;
+}
+
+
+.highlight-overlay p {
+    margin: 0;
+
+    font-size: 0.9rem;
+
+    line-height: 1.6;
+
+    opacity: 0.85;
+}
+
+
+.highlight-link {
+    display: inline-block;
+
+    margin-top: 18px;
+
+    font-weight: 700;
+
+    font-size: 0.9rem;
+
+    color: white;
+
+    transition:
+        transform 0.3s ease;
+}
+
+
+/* HOVER EFFECT */
+
+.highlight-card:hover {
+    transform: scale(1.05);
+
+    z-index: 10;
+
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.28);
+}
+
+
+.highlight-card:hover img {
+    transform: scale(1.08);
+}
+
+
+.highlight-card:hover .highlight-link {
+    transform: translateX(5px);
+}
+
+
+/* CONTINUOUS SCROLL */
+
+@keyframes highlightsScroll {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    #highlights {
+        padding: 75px 0;
+    }
+
+
+    .highlights-track {
+        gap: 18px;
+
+        animation-duration: 28s;
+    }
+
+
+    .highlight-card {
+        width: 280px;
+        height: 380px;
+
+        border-radius: 20px;
+    }
+
+
+    .highlight-overlay {
+        padding: 22px;
+    }
+
+
+    .highlight-overlay h2 {
+        font-size: 1.2rem;
+    }
+
+
+    .highlight-overlay p {
+        font-size: 0.82rem;
+    }
+
+}
+
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .highlights-track {
+        animation: none;
+    }
+
+}
+
+/* =========================================================
+   RECENT HIGHLIGHTS / ACTIVITIES
+========================================================= */
+
+.activities-section {
+    padding: 100px 0;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at top center,
+            rgba(0, 229, 255, 0.08),
+            transparent 45%
+        );
+}
+
+
+.activities-header {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 50px;
+    padding: 0 20px;
+}
+
+
+.activities-eyebrow {
+    color: #00e5ff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+
+.activities-subtitle {
+    color: #a7b0c0;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+
+.activities-marquee {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.activities-track {
+    display: flex;
+    gap: 30px;
+    width: max-content;
+    animation: activitiesScroll 35s linear infinite;
+    padding: 10px 0 25px;
+}
+
+
+/* PAUSE ON HOVER */
+
+.activities-marquee:hover .activities-track {
+    animation-play-state: paused;
+}
+
+
+/* ACTIVITY CARD */
+
+.activity-card {
+    width: 350px;
+    min-width: 350px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease,
+        border-color 0.4s ease;
+}
+
+
+.activity-card:hover {
+    transform: translateY(-12px);
+    border-color: rgba(0, 229, 255, 0.6);
+    box-shadow:
+        0 25px 60px rgba(0, 229, 255, 0.16);
+}
+
+
+/* IMAGE */
+
+.activity-image-wrapper {
+    height: 230px;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.activity-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition:
+        transform 0.6s ease,
+        filter 0.6s ease;
+}
+
+
+.activity-card:hover .activity-image {
+    transform: scale(1.1);
+    filter: brightness(0.7);
+}
+
+
+/* HOVER OVERLAY */
+
+.activity-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(6, 12, 24, 0.9),
+            rgba(6, 12, 24, 0.15)
+        );
+
+    transition: opacity 0.4s ease;
+}
+
+
+.activity-card:hover .activity-overlay {
+    opacity: 1;
+}
+
+
+.activity-read-more {
+    padding: 12px 24px;
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.95);
+    color: #111827;
+
+    font-weight: 700;
+    font-size: 0.9rem;
+
+    transform: translateY(15px);
+
+    transition: transform 0.4s ease;
+}
+
+
+.activity-card:hover .activity-read-more {
+    transform: translateY(0);
+}
+
+
+/* CONTENT */
+
+.activity-content {
+    padding: 22px;
+}
+
+
+.activity-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+
+.activity-description {
+    color: #9ca3af;
+    font-size: 0.92rem;
+    line-height: 1.6;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* DATE */
+
+.activity-date {
+    margin-top: 18px;
+
+    color: #00e5ff;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+
+/* LOADING */
+
+.activities-loading {
+    width: 100vw;
+    text-align: center;
+    color: #9ca3af;
+    padding: 50px;
+}
+
+
+/* INFINITE SCROLL */
+
+@keyframes activitiesScroll {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+
+}
+
+
+/* MOBILE */
+
+@media screen and (max-width: 700px) {
+
+    .activities-section {
+        padding: 70px 0;
+    }
+
+
+    .activity-card {
+        width: 280px;
+        min-width: 280px;
+    }
+
+
+    .activity-image-wrapper {
+        height: 190px;
+    }
+
+
+    .activities-track {
+        gap: 20px;
+        animation-duration: 25s;
+    }
+
+}
