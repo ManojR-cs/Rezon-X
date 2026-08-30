@@ -54,7 +54,69 @@
 }
 
 
-        /* ===== MODAL ===== */
+/* ===== GALLERY ALBUM CARDS ===== */
+
+.gallery-album-card {
+    position: relative;
+    width: 320px;
+    height: 220px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #131c2f;
+    border: 1px solid rgba(0, 217, 255, 0.15);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+    flex-shrink: 0;
+}
+
+.gallery-album-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(0, 217, 255, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 217, 255, 0.2);
+}
+
+.gallery-album-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-album-card:hover img {
+    transform: scale(1.08);
+}
+
+.gallery-album-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 16px 14px;
+    background: linear-gradient(to top, rgba(9, 13, 22, 0.95) 0%, rgba(9, 13, 22, 0.6) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    pointer-events: none;
+}
+
+.gallery-album-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    margin: 0;
+}
+
+.gallery-album-count {
+    color: #00d9ff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ===== MODAL ===== */
 
 .gallery-modal{
     display: none;
@@ -74,6 +136,48 @@
     overflow-y: auto;
 
     padding: 80px 20px 40px;
+}
+
+.gallery-modal-header {
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    text-align: center;
+}
+
+.gallery-modal-title {
+    color: #00d9ff;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.gallery-modal-subtitle {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.gallery-modal-img-wrap {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #131c2f;
+    aspect-ratio: 4 / 3;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-modal-img-wrap:hover {
+    transform: scale(1.03);
+    border-color: #00d9ff;
+    box-shadow: 0 8px 24px rgba(0, 217, 255, 0.25);
+}
+
+.gallery-modal-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .gallery-modal.active{
