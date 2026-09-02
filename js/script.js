@@ -2457,7 +2457,7 @@ async function loadGallery() {
 
 
 /* =========================================================
-   LOAD SITE SETTINGS - MEMBER COUNT
+   LOAD SITE SETTINGS - MEMBER COUNT & HERO BACKGROUND
    ========================================================= */
 
 async function loadSiteSettings() {
@@ -2469,7 +2469,7 @@ async function loadSiteSettings() {
             error
         } = await supabaseClient
             .from("site_settings")
-            .select("member_count")
+            .select("member_count, hero_image_url")
             .eq("id", 1)
             .single();
 
@@ -2477,40 +2477,54 @@ async function loadSiteSettings() {
             throw error;
         }
 
-        if (
-            data &&
-            typeof data.member_count === "number"
-        ) {
+        if (data) {
 
-            /* Find the Members stat-number element */
-            const memberStatEl =
-                document.querySelector(
-                    ".stat-number[data-member-count]"
-                ) ||
-                (function () {
-                    /* Fallback: find by sibling text "Members" */
-                    const statNumbers =
-                        document.querySelectorAll(
-                            ".stat-number"
-                        );
+            /* 1. Member Count */
+            if (typeof data.member_count === "number") {
+                const memberStatEl =
+                    document.querySelector(
+                        ".stat-number[data-member-count]"
+                    ) ||
+                    (function () {
+                        /* Fallback: find by sibling text "Members" */
+                        const statNumbers =
+                            document.querySelectorAll(
+                                ".stat-number"
+                            );
 
-                    for (let i = 0; i < statNumbers.length; i++) {
-                        const card = statNumbers[i].closest(".stat-card");
-                        if (
-                            card &&
-                            card.textContent &&
-                            card.textContent.toLowerCase().includes("member")
-                        ) {
-                            return statNumbers[i];
+                        for (let i = 0; i < statNumbers.length; i++) {
+                            const card = statNumbers[i].closest(".stat-card");
+                            if (
+                                card &&
+                                card.textContent &&
+                                card.textContent.toLowerCase().includes("member")
+                            ) {
+                                return statNumbers[i];
+                            }
                         }
-                    }
 
-                    return null;
-                })();
+                        return null;
+                    })();
 
-            if (memberStatEl) {
-                memberStatEl.dataset.count =
-                    String(data.member_count);
+                if (memberStatEl) {
+                    memberStatEl.dataset.count =
+                        String(data.member_count);
+                }
+            }
+
+            /* 2. Dynamic Hero Background Image */
+            if (
+                data.hero_image_url &&
+                typeof data.hero_image_url === "string" &&
+                data.hero_image_url.trim() !== ""
+            ) {
+                const heroSection = document.querySelector(".hero");
+                if (heroSection) {
+                    heroSection.style.backgroundImage =
+                        'linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url("' +
+                        data.hero_image_url.trim() +
+                        '")';
+                }
             }
 
         }
