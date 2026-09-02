@@ -2461,15 +2461,10 @@ async function loadGallery() {
    ========================================================= */
 
 async function loadSiteSettings() {
-
     try {
-
-        const {
-            data,
-            error
-        } = await supabaseClient
+        const { data, error } = await supabaseClient
             .from("site_settings")
-            .select("member_count, hero_image_url")
+            .select("member_count")
             .eq("id", 1)
             .single();
 
@@ -2479,31 +2474,45 @@ async function loadSiteSettings() {
 
         if (data) {
 
-            /* 1. Member Count */
+            // Update member count
             if (typeof data.member_count === "number") {
+
                 const memberStatEl =
                     document.querySelector(
                         ".stat-number[data-member-count]"
                     ) ||
                     (function () {
-                        /* Fallback: find by sibling text "Members" */
+
                         const statNumbers =
                             document.querySelectorAll(
                                 ".stat-number"
                             );
 
-                        for (let i = 0; i < statNumbers.length; i++) {
-                            const card = statNumbers[i].closest(".stat-card");
+                        for (
+                            let i = 0;
+                            i < statNumbers.length;
+                            i++
+                        ) {
+
+                            const card =
+                                statNumbers[i].closest(
+                                    ".stat-card"
+                                );
+
                             if (
                                 card &&
                                 card.textContent &&
-                                card.textContent.toLowerCase().includes("member")
+                                card.textContent
+                                    .toLowerCase()
+                                    .includes("member")
                             ) {
                                 return statNumbers[i];
                             }
+
                         }
 
                         return null;
+
                     })();
 
                 if (memberStatEl) {
@@ -2512,21 +2521,7 @@ async function loadSiteSettings() {
                 }
             }
 
-            /* 2. Dynamic Hero Background Image */
-            if (
-                data.hero_image_url &&
-                typeof data.hero_image_url === "string" &&
-                data.hero_image_url.trim() !== ""
-            ) {
-                const heroSection = document.querySelector(".hero");
-                if (heroSection) {
-                    heroSection.style.backgroundImage =
-                        'linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.7)), url("' +
-                        data.hero_image_url.trim() +
-                        '")';
-                }
-            }
-
+            
         }
 
     } catch (err) {
@@ -2535,13 +2530,65 @@ async function loadSiteSettings() {
             "Failed to load site settings:",
             err
         );
-
-        /* Retain existing fallback value — do nothing */
-
     }
-
 }
 
+async function loadClubStatistics() {
+    try {
+        const { data, error } = await supabaseClient
+            .from("statistics")
+            .select("label, value");
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data) {
+            return;
+        }
+
+        data.forEach(function (stat) {
+
+            const label = String(stat.label)
+                .trim()
+                .toLowerCase();
+
+            let target = null;
+
+            const statNumbers =
+                document.querySelectorAll(".stat-number");
+
+            statNumbers.forEach(function (element) {
+
+                const card = element.closest(".stat-card");
+
+                if (!card || target) {
+                    return;
+                }
+
+                const cardText =
+                    card.textContent
+                        .trim()
+                        .toLowerCase();
+
+                if (cardText.includes(label)) {
+                    target = element;
+                }
+            });
+
+            if (target && typeof stat.value === "number") {
+                target.dataset.count = String(stat.value);
+            }
+        });
+
+    } catch (err) {
+
+        console.error(
+            "Failed to load club statistics:",
+            err
+        );
+    }
+}
 
 /* =========================================================
    CONSOLIDATED INITIALIZATION
@@ -2550,25 +2597,18 @@ async function loadSiteSettings() {
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-
-        /* 1. Fetch member count first — data-count on the member
-              stat element is updated before the stats observer
-              reads it, preventing a race condition. */
-        loadSiteSettings().then(function () {
-
-            /* 2. Initialise the stat count-up observer now that
-                  member_count is already written into data-count. */
-            initStatsObserver();
-
-            /* 3. Load dynamic CMS content. */
-            loadProjects();
-            loadAchievements();
-            loadGallery();
-
-        });
-
+        loadSiteSettings()
+            .then(function () {
+                return loadClubStatistics();
+            })
+            .then(function () {
+                initStatsObserver();
+                loadProjects();
+                loadAchievements();
+                loadGallery();
+            });
     }
 );
 
 /* Activities marquee runs independently (no DOM dependency) */
-loadActivities();
+loadActivities();
