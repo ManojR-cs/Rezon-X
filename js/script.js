@@ -1090,6 +1090,12 @@ async function loadProjects() {
         track.innerHTML = "";
 
         projects.forEach(function (project) {
+             console.log(
+        "PUBLIC PROJECT:",
+        project.title,
+        "TECH STACK:",
+        project.tech_stack
+    );
             const slug = getProjectSlug(project);
             projectsMap[slug] = project;
             projectsMap[project.id] = project;
@@ -1754,11 +1760,11 @@ function initStatsObserver() {
    CMS ACTIVITIES / RECENT HIGHLIGHTS
 ========================================================= */
 
-async function loadActivities() {
+async function loadActivities(type = "recent_highlight", trackId = "activitiesTrack", emptyMessage = "No recent highlights available.", errorMessage = "Unable to load recent highlights.") {
 
     const activitiesTrack =
         document.getElementById(
-            "activitiesTrack"
+            trackId
         );
 
 
@@ -1773,6 +1779,7 @@ async function loadActivities() {
     } = await supabaseClient
         .from("activities")
         .select("*")
+        .eq("type", type)
         .order(
             "created_at",
             {
@@ -1793,7 +1800,7 @@ async function loadActivities() {
             `
             <div class="activities-loading">
 
-                Unable to load recent highlights.
+                ${errorMessage}
 
             </div>
             `;
@@ -1813,7 +1820,7 @@ async function loadActivities() {
             `
             <div class="activities-loading">
 
-                No recent highlights available.
+                ${emptyMessage}
 
             </div>
             `;
@@ -1827,10 +1834,42 @@ async function loadActivities() {
     activitiesTrack.innerHTML =
         "";
 
+    function resolveActivityImageUrl(imageUrl) {
+        return new URL(
+            imageUrl || "assets/placeholder.jpg",
+            "https://manojr-cs.github.io/Rezon-X/"
+        ).toString();
+    }
+
 
     function createActivityCard(
-        activity
+        activity,
+        isActivity
     ) {
+        if (isActivity) {
+            const card = document.createElement("article");
+            card.className = "activity-event-card";
+
+            const image = document.createElement("img");
+            image.className = "activity-event-image";
+            image.src = resolveActivityImageUrl(activity.image_url);
+            image.alt = activity.title || "RezonX activity";
+
+            const content = document.createElement("div");
+            content.className = "activity-event-content";
+
+            const title = document.createElement("h3");
+            title.className = "activity-event-title";
+            title.textContent = activity.title || "";
+
+            const description = document.createElement("p");
+            description.className = "activity-event-description";
+            description.textContent = activity.description || "";
+
+            content.append(title, description);
+            card.append(image, content);
+            return card;
+        }
 
         const card =
             document.createElement(
@@ -1858,9 +1897,7 @@ async function loadActivities() {
         }
 
 
-        const imageUrl =
-            activity.image_url ||
-            "assets/placeholder.jpg";
+        const imageUrl = resolveActivityImageUrl(activity.image_url);
 
 
         const date =
@@ -1972,7 +2009,8 @@ async function loadActivities() {
 
             activitiesTrack.appendChild(
                 createActivityCard(
-                    activity
+                activity,
+                type === "activity"
                 )
             );
 
@@ -1988,7 +2026,8 @@ async function loadActivities() {
 
             activitiesTrack.appendChild(
                 createActivityCard(
-                    activity
+                activity,
+                type === "activity"
                 )
             );
 
@@ -2581,6 +2620,30 @@ async function loadClubStatistics() {
             }
         });
 
+        const [{ count: projectCount }, { count: eventCount }] =
+            await Promise.all([
+                supabaseClient
+                    .from("projects")
+                    .select("*", { count: "exact", head: true }),
+                supabaseClient
+                    .from("activities")
+                    .select("*", { count: "exact", head: true })
+                    .eq("type", "activity")
+            ]);
+
+        document.querySelectorAll(".stat-card").forEach(function (card) {
+            const label = card.textContent.trim().toLowerCase();
+            const target = card.querySelector(".stat-number");
+
+            if (target && label.includes("projects") && projectCount !== null) {
+                target.dataset.count = String(projectCount);
+            }
+
+            if (target && label.includes("events") && eventCount !== null) {
+                target.dataset.count = String(eventCount);
+            }
+        });
+
     } catch (err) {
 
         console.error(
@@ -2612,3 +2675,4 @@ document.addEventListener(
 
 /* Activities marquee runs independently (no DOM dependency) */
 loadActivities();
+loadActivities("activity", "activitiesEventsTrack", "No activities or events available.", "Unable to load activities and events.");

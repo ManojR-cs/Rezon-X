@@ -2777,6 +2777,72 @@
         );
 }
 
+.activities-events-timeline {
+    height: 420px;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px 20px 25px;
+    position: relative;
+}
+
+.activities-events-track {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: activitiesEventsScroll 24s linear infinite;
+}
+
+.activities-events-section:hover .activities-events-track {
+    animation-play-state: paused;
+}
+
+.activity-event-card {
+    display: flex;
+    flex-shrink: 0;
+    min-height: 180px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    background: #111827;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.activity-event-image {
+    width: 280px;
+    min-width: 280px;
+    object-fit: cover;
+}
+
+.activity-event-content {
+    padding: 28px;
+    text-align: left;
+}
+
+.activity-event-title {
+    margin: 0 0 12px;
+    color: #fff;
+    font-size: 1.35rem;
+    line-height: 1.35;
+}
+
+.activity-event-description {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+@keyframes activitiesEventsScroll {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(calc(-50% - 10px));
+    }
+}
+
 
 .activities-header {
     text-align: center;
@@ -3017,4 +3083,88 @@
         animation-duration: 25s;
     }
 
+    .activities-events-timeline {
+        height: 360px;
+        padding: 10px 16px 20px;
+    }
+
+    .activity-event-card {
+        display: block;
+    }
+
+    .activity-event-image {
+        width: 100%;
+        min-width: 0;
+        height: 170px;
+    }
+
+    .activity-event-content {
+        padding: 20px;
+    }
+
+    .activity-event-title {
+        font-size: 1.15rem;
+    }
+
+    .activity-event-description {
+        font-size: 0.88rem;
+    }
+
+}
+
+/* =========================================================
+   FINAL PROJECT CARD / TECH STACK FIX
+   ========================================================= */
+
+.projects-track {
+    align-items: stretch;
+}
+
+.project-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100% !important;
+    min-width: 0 !important;
+}
+
+.project-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+
+.project-tech-stack {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-height: 64px !important;
+    gap: 8px !important;
+    margin: 18px 0 !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.project-tech-stack span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    z-index: 3 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.project-brief {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.project-btn {
+    margin-top: 4px !important;
 }
