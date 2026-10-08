@@ -1089,13 +1089,7 @@ async function loadProjects() {
         projectsMap = {};
         track.innerHTML = "";
 
-        projects.forEach(function (project) {
-             console.log(
-        "PUBLIC PROJECT:",
-        project.title,
-        "TECH STACK:",
-        project.tech_stack
-    );
+        function createProjectCard(project) {
             const slug = getProjectSlug(project);
             projectsMap[slug] = project;
             projectsMap[project.id] = project;
@@ -1114,7 +1108,7 @@ async function loadProjects() {
 
             article.innerHTML = `
                 <div class="project-image">
-                    <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(project.title)}">
+                    <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(project.title)}" loading="lazy">
                 </div>
                 <div class="project-content">
                     <h3>${escapeHtml(project.title)}</h3>
@@ -1122,13 +1116,13 @@ async function loadProjects() {
                     <div class="project-tech-stack">
                         ${techBadgesHtml}
                     </div>
-                    <button class="project-btn">View Project</button>
+                    <button class="project-btn" type="button">View Project</button>
                     <div class="project-engagement">
-                        <button class="project-like-btn" data-project-id="${escapeHtml(slug)}" aria-label="Like ${escapeHtml(project.title)} project">
+                        <button class="project-like-btn" type="button" data-project-id="${escapeHtml(slug)}" aria-label="Like ${escapeHtml(project.title)} project">
                             <span>❤️</span>
                             <span class="like-count">0</span>
                         </button>
-                        <button class="project-comment-btn" data-project-id="${escapeHtml(slug)}" aria-label="View ${escapeHtml(project.title)} comments">
+                        <button class="project-comment-btn" type="button" data-project-id="${escapeHtml(slug)}" aria-label="View ${escapeHtml(project.title)} comments">
                             <span>💬</span>
                             <span class="comment-count" data-project-id="${escapeHtml(slug)}">0</span>
                         </button>
@@ -1148,20 +1142,21 @@ async function loadProjects() {
                 handleProjectLike(this);
             });
 
-            track.appendChild(article);
-        });
-
-        if (dotsContainer) {
-            dotsContainer.innerHTML = "";
-            projects.forEach(function (_, index) {
-                const dotBtn = document.createElement("button");
-                dotBtn.className = index === 0 ? "project-dot active" : "project-dot";
-                dotBtn.setAttribute("aria-label", `Project ${index + 1}`);
-                dotsContainer.appendChild(dotBtn);
-            });
+            return article;
         }
 
-        initProjectCarousel();
+        // Original set of project cards
+        projects.forEach(function (project) {
+            track.appendChild(createProjectCard(project));
+        });
+
+        // Duplicate set for seamless infinite marquee
+        projects.forEach(function (project) {
+            const duplicate = createProjectCard(project);
+            duplicate.setAttribute("aria-hidden", "true");
+            track.appendChild(duplicate);
+        });
+
         loadLikeCounts();
         loadProjectCommentCounts();
 
@@ -2082,58 +2077,44 @@ async function loadAchievements() {
 
         container.innerHTML = "";
 
-        achievements.forEach(function (achievement) {
+        function createAchievementCard(achievement) {
+            const card = document.createElement("div");
+            card.className = "card achievement-card";
 
-            const card =
-                document.createElement("div");
+            const img = document.createElement("img");
+            img.src = achievement.image_url || "";
+            img.alt = achievement.title || "Achievement";
+            img.loading = "lazy";
 
-            card.className = "card";
-
-            const img =
-                document.createElement("img");
-
-            img.src =
-                achievement.image_url || "";
-
-            img.alt =
-                achievement.title || "Achievement";
-
-            const content =
-                document.createElement("div");
-
+            const content = document.createElement("div");
             content.className = "card-content";
 
-            const heading =
-                document.createElement("h3");
-
-            heading.textContent =
-                achievement.title || "";
-
+            const heading = document.createElement("h3");
+            heading.textContent = achievement.title || "";
             content.appendChild(heading);
 
             if (achievement.description) {
-
-                const desc =
-                    document.createElement("p");
-
-                desc.textContent =
-                    achievement.description;
-
+                const desc = document.createElement("p");
+                desc.textContent = achievement.description;
                 content.appendChild(desc);
-
             }
 
             card.appendChild(img);
             card.appendChild(content);
 
-            container.appendChild(card);
+            return card;
+        }
 
-            /* Register new card with scroll reveal observer */
-            if (window._rezonxRevealObserver) {
-                card.classList.add("reveal-on-scroll");
-                window._rezonxRevealObserver.observe(card);
-            }
+        // Original set of achievement cards
+        achievements.forEach(function (achievement) {
+            container.appendChild(createAchievementCard(achievement));
+        });
 
+        // Duplicate set for seamless infinite marquee
+        achievements.forEach(function (achievement) {
+            const duplicate = createAchievementCard(achievement);
+            duplicate.setAttribute("aria-hidden", "true");
+            container.appendChild(duplicate);
         });
 
     } catch (err) {

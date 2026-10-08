@@ -2777,70 +2777,75 @@
         );
 }
 
-.activities-events-timeline {
-    height: 420px;
-    max-width: 900px;
-    margin: 0 auto;
+.activities-events-timeline,
+.activities-events-marquee {
+    width: 100%;
+    max-width: 100%;
     overflow: hidden;
-    padding: 10px 20px 25px;
+    padding: 10px 0 25px;
     position: relative;
 }
 
 .activities-events-track {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    animation: activitiesEventsScroll 24s linear infinite;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 24px;
+    width: max-content;
+    animation: autoScroll 30s linear infinite;
+    padding: 10px 0 25px;
 }
 
+.activities-events-timeline:hover .activities-events-track,
+.activities-events-marquee:hover .activities-events-track,
 .activities-events-section:hover .activities-events-track {
     animation-play-state: paused;
 }
 
 .activity-event-card {
     display: flex;
+    flex-direction: column;
+    width: 360px;
+    min-width: 360px;
     flex-shrink: 0;
-    min-height: 180px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 24px;
     background: #111827;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.activity-event-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(0, 229, 255, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 229, 255, 0.15);
 }
 
 .activity-event-image {
-    width: 280px;
-    min-width: 280px;
+    width: 100%;
+    min-width: 100%;
+    height: 200px;
     object-fit: cover;
 }
 
 .activity-event-content {
-    padding: 28px;
+    padding: 24px;
     text-align: left;
 }
 
 .activity-event-title {
-    margin: 0 0 12px;
+    margin: 0 0 10px;
     color: #fff;
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     line-height: 1.35;
 }
 
 .activity-event-description {
     margin: 0;
     color: #9ca3af;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     line-height: 1.6;
-}
-
-@keyframes activitiesEventsScroll {
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(calc(-50% - 10px));
-    }
 }
 
 
@@ -3168,3 +3173,128 @@
 .project-btn {
     margin-top: 4px !important;
 }
+
+/* =========================================================
+   UNIFIED GALLERY-STYLE AUTO-SCROLLING MARQUEE FOR ALL SECTIONS
+   ========================================================= */
+
+.auto-gallery,
+.activities-events-marquee,
+.projects-marquee,
+.achievements-marquee,
+.activities-marquee {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-track,
+.activities-events-track,
+.projects-track,
+.achievements-track,
+.activities-track {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 24px !important;
+    width: max-content !important;
+    animation: autoScroll 30s linear infinite !important;
+    padding: 10px 0 25px !important;
+    transition: none !important;
+    will-change: transform !important;
+}
+
+.auto-gallery:hover .gallery-track,
+.activities-events-marquee:hover .activities-events-track,
+.activities-events-timeline:hover .activities-events-track,
+.activities-events-section:hover .activities-events-track,
+.projects-marquee:hover .projects-track,
+.projects-carousel:hover .projects-track,
+.achievements-marquee:hover .achievements-track,
+.activities-marquee:hover .activities-track {
+    animation-play-state: paused !important;
+}
+
+/* Card sizing to ensure horizontal flow */
+.project-card {
+    width: 360px !important;
+    min-width: 360px !important;
+    max-width: 360px !important;
+    flex: 0 0 360px !important;
+}
+
+.achievements-track .card,
+.achievement-card {
+    width: 340px !important;
+    min-width: 340px !important;
+    max-width: 340px !important;
+    flex: 0 0 340px !important;
+    background: #131c2f !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease !important;
+}
+
+.achievements-track .card:hover,
+.achievement-card:hover {
+    transform: translateY(-8px) !important;
+    border-color: rgba(0, 217, 255, 0.45) !important;
+    box-shadow: 0 12px 30px rgba(0, 217, 255, 0.2) !important;
+}
+
+.achievements-track .card img,
+.achievement-card img {
+    width: 100% !important;
+    height: 220px !important;
+    object-fit: cover !important;
+    display: block !important;
+}
+
+.achievements-track .card .card-content,
+.achievement-card .card-content {
+    padding: 24px !important;
+    text-align: left !important;
+}
+
+.achievements-track .card-content h3,
+.achievement-card .card-content h3 {
+    margin-bottom: 12px !important;
+    color: #00d9ff !important;
+    font-size: 1.15rem !important;
+}
+
+.achievements-track .card-content p,
+.achievement-card .card-content p {
+    color: #9ca3af !important;
+    font-size: 0.92rem !important;
+    line-height: 1.6 !important;
+}
+
+@media screen and (max-width: 700px) {
+    .gallery-track,
+    .activities-events-track,
+    .projects-track,
+    .achievements-track,
+    .activities-track {
+        gap: 16px !important;
+    }
+
+    .project-card,
+    .activity-event-card,
+    .activity-card {
+        width: 290px !important;
+        min-width: 290px !important;
+        max-width: 290px !important;
+        flex: 0 0 290px !important;
+    }
+
+    .achievements-track .card,
+    .achievement-card,
+    .gallery-album-card {
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+        flex: 0 0 280px !important;
+    }
+}

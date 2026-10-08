@@ -127,8 +127,8 @@
             <h1 class="section-title">Activities & Events</h1>
             <p class="activities-subtitle">See what RezonX is building, learning and taking part in.</p>
         </div>
-        <div class="activities-events-timeline">
-            <div class="activities-events-track" id="activitiesEventsTrack">
+        <div class="auto-gallery activities-events-marquee">
+            <div class="gallery-track activities-events-track" id="activitiesEventsTrack">
                 <div class="activities-loading">Loading activities and events...</div>
             </div>
         </div>
@@ -144,41 +144,10 @@
 
     <h1 class="section-title">Projects</h1>
 
-    <div class="projects-carousel">
-
-        <!-- PREVIOUS BUTTON -->
-        <button
-            class="project-arrow project-prev"
-            aria-label="Previous project">
-            &#10094;
-        </button>
-
-
-        <!-- VIEWPORT -->
-        <div class="projects-viewport">
-
-            <div class="projects-track">
-                <!-- Dynamically populated from Supabase -->
-            </div>
-
+    <div class="auto-gallery projects-marquee">
+        <div class="gallery-track projects-track" id="projectsTrack">
+            <!-- Dynamically populated from Supabase -->
         </div>
-
-
-        <!-- NEXT BUTTON -->
-
-        <button
-            class="project-arrow project-next"
-            aria-label="Next project">
-            &#10095;
-        </button>
-
-    </div>
-
-
-    <!-- DOTS -->
-
-    <div class="project-dots">
-        <!-- Dynamically populated from Supabase -->
     </div>
 
 </section>
@@ -312,8 +281,10 @@
         <h1 class="section-title">Achievement Highlights</h1>
 
         <!-- Dynamically populated from Supabase -->
-        <div class="team" id="achievementsContainer">
-            <!-- Achievement cards will be injected here -->
+        <div class="auto-gallery achievements-marquee">
+            <div class="gallery-track achievements-track" id="achievementsContainer">
+                <!-- Achievement cards will be injected here -->
+            </div>
         </div>
 
     </section>
@@ -353,11 +324,11 @@
     <!-- ACTIVITIES MARQUEE -->
 
     <div
-        class="activities-marquee"
+        class="auto-gallery activities-marquee"
         id="activitiesMarquee">
 
         <div
-            class="activities-track"
+            class="gallery-track activities-track"
             id="activitiesTrack">
 
             <div
